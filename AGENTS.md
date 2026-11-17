@@ -13,7 +13,7 @@ Commands are run with [`just`](https://github.com/casey/just): the `Justfile` do
 Setup (creates `.venv` with `python3.13` if it does not exist, and installs `requirements.txt` into it):
 
 ```sh
-just deps
+just setup
 ```
 
 Run all tests (`pytest`, configured in `pytest.ini`):
@@ -76,9 +76,9 @@ Each property has a spec in `certora/specs/` and a conf in `certora/conf/`. CI (
 
 ### Dependencies
 
-`requirements.txt` pins every direct and transitive dependency to an exact version. The direct dependencies are `vyper`, `titanoboa`, `pytest` and `certora-cli`. To add one or upgrade them all, regenerate the file with `just requirements`, which installs the latest direct dependencies into a fresh virtual environment at `/tmp/safe-bug-bounty-venv` and writes its `pip freeze` to `requirements.txt` (add a new dependency to the recipe's `pip install` line first). Then run `just deps` to update `.venv`:
+`requirements.txt` pins every direct and transitive dependency to an exact version. The direct dependencies are `vyper`, `titanoboa`, `pytest` and `certora-cli`. To add one or upgrade them all, regenerate the file with `just requirements`, which installs the latest direct dependencies into a fresh virtual environment at `/tmp/safe-bug-bounty-venv` and writes its `pip freeze` to `requirements.txt` (add a new dependency to the recipe's `pip install` line first). Then run `just setup` to update `.venv`:
 
 ```sh
 just requirements
-just deps
+just setup
 ```

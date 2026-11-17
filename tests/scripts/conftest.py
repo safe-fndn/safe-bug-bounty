@@ -22,6 +22,11 @@ def chain_id():
 
 
 @pytest.fixture
+def safe_token():
+    return "0x5aFE3855358E112B5647B952709E6165e1c1eEEe"
+
+
+@pytest.fixture
 def factory():
     """The Safe singleton factory at its address."""
     boa.env.set_code(common.FACTORY, FACTORY_CODE)

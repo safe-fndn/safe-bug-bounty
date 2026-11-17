@@ -7,7 +7,7 @@ The permissionless on-chain submission bond for the Safe bug bounty. To submit a
 Requires Python 3.13 and [`just`](https://github.com/casey/just).
 
 ```sh
-just deps
+just setup
 ```
 
 This creates a `.venv` virtual environment and installs the pinned dependencies from `requirements.txt`. The `just` recipes use `.venv` directly, so it does not need to be activated. Run `just` to list all recipes.

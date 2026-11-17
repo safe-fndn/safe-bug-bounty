@@ -1,6 +1,6 @@
 # Repo-wide command runner.
 # Recipes run tools from the `.venv` virtual environment (created by
-# `just deps`), so it does not need to be activated.
+# `just setup`), so it does not need to be activated.
 
 set shell := ["bash", "-euo", "pipefail", "-c"]
 
@@ -11,7 +11,7 @@ default:
     @just --list
 
 # Create the .venv virtual environment and install the pinned dependencies.
-deps:
+setup:
     test -d .venv || python3.13 -m venv .venv
     pip install -r requirements.txt
 
