@@ -32,7 +32,7 @@ Shared test fixtures (accounts, the mock token, the `BountyBond` contract) live 
 
 ### Scripts
 
-The scripts in `scripts/` never use private keys and never connect to a node. They compute everything offline and write a Safe Transaction Builder bundle (a JSON file) that the owners of a Safe import into the Transaction Builder app in the Safe UI, which simulates the transactions before they are signed and executed. Shared helpers (argument types, compiling `contracts/BountyBond.vy`, the deployment address, the EIP-712 submission hash and bond ID, normalizing and salting submissions, and writing bundles) are in `scripts/common.py`. `tests/scripts/conftest.py` has fixtures that deploy `BountyBond` through the factory (`factory_bond`) and execute a bundle's transactions in titanoboa (`execute_bundle`).
+The scripts in `scripts/` never use private keys and never connect to a node. They compute everything offline, and all but `submission.py` write a Safe Transaction Builder bundle (a JSON file) that the owners of a Safe import into the Transaction Builder app in the Safe UI, which simulates the transactions before they are signed and executed. Shared helpers (argument types, compiling `contracts/BountyBond.vy`, the deployment address, the EIP-712 submission hash and bond ID, normalizing and salting submissions, and writing bundles) are in `scripts/common.py`. `tests/scripts/conftest.py` has fixtures that deploy `BountyBond` through the factory (`factory_bond`) and execute a bundle's transactions in titanoboa (`execute_bundle`).
 
 `BountyBond` is deployed through the Safe singleton factory (`0x914d7Fec6aaC8cd542e72Bca78B30650d45643d7`, a `CREATE2` factory at the same address on every bytecode-compatible EVM chain), so its address follows from its deployment parameters. Every script therefore takes the same options, with the production values as defaults, and computes the contract's address from them (`common.bond_address`):
 
@@ -63,6 +63,14 @@ just claim --owner SAFE --bond-id ID [--out PATH] [shared options]
 ```
 
 `--bond-id` is the bond ID that `just bond` printed (`0x` followed by 64 hex digits), and the shared options must match the deployment, since they determine the `BountyBond` address. The bundle has one transaction, `claim(<bond ID>)`, and is written to `--out` (default `bundles/claim-<first 8 hex digits of the bond ID>.json`). The script prints the bond ID, the `BountyBond` address and chain ID, the owner and the amount that will be returned. It cannot check the bond's state, so the claim only succeeds when the bundle is executed by the owner after the lockup has passed; otherwise the Safe UI's simulation shows the contract's revert reason (`locked`, `not owner`, `already claimed` or `unknown bond`).
+
+Compute the submission hash of a submission email, and its bond ID for the Safe `--owner` if given (`just submission` runs `python scripts/submission.py`):
+
+```sh
+just submission FILE.eml [--owner SAFE] [shared options]
+```
+
+The `.eml` file is parsed with the standard library `email` package (`policy.default`, which unfolds and decodes headers). The email is the `addr_spec` of the single `From` address and the subject is the single `Subject` header, both normalized as in `just bond`. Errors are deliberately strict: anything other than exactly one `From` address and one `Subject`, a subject that is not printable ASCII, attachments, and any parts that are not `text/*` (or `multipart/*` containers) are rejected. The script writes no bundle; it prints the email, subject and submission hash, and with `--owner` the bond ID, the `BountyBond` address and chain ID, and the owner.
 
 ### Formal verification
 
