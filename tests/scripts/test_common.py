@@ -211,7 +211,6 @@ def test_compile_bond(token, amount, lockup):
     assert bond.LOCKUP() == lockup
 
 
-
 def test_transaction_bundle():
     transactions = [
         {"to": TO, "data": "0x01"},

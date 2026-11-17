@@ -17,32 +17,44 @@ setup:
 
 # Run the tests with pytest, passing through any arguments.
 test *args:
-    pytest {{args}}
+    pytest {{ args }}
+
+# Check formatting and lint the Python, Markdown and Justfile.
+lint:
+    ruff check
+    ruff format --check
+    git ls-files -z '*.md' | xargs -0 mdformat --check
+    just --fmt --check --unstable
+
+# Format and fix lints in the Python, Markdown and Justfile.
+fix:
+    ruff check --fix
+    ruff format
+    git ls-files -z '*.md' | xargs -0 mdformat
+    just --fmt --unstable
 
 # Run the Certora Prover on certora/conf/<conf>.conf, passing through any arguments.
-# `--short_output` makes certoraRun wait on the job status (as it does in CI)
-# instead of tailing the log, which does not return when the job finishes.
 certora conf *args:
-    certoraRun certora/conf/{{conf}}.conf --short_output {{args}}
+    certoraRun certora/conf/{{ conf }}.conf --short_output {{ args }}
 
 # Write the Safe Transaction Builder bundle that deploys BountyBond.
 deploy *args:
-    python scripts/deploy.py {{args}}
+    python scripts/deploy.py {{ args }}
 
 # Write the Safe Transaction Builder bundle that posts a bond for a submission.
 bond *args:
-    python scripts/bond.py {{args}}
+    python scripts/bond.py {{ args }}
 
 # Write the Safe Transaction Builder bundle that claims a bond back after its lockup.
 claim *args:
-    python scripts/claim.py {{args}}
+    python scripts/claim.py {{ args }}
 
 # Compute the submission hash (and optionally the bond ID) of a submission .eml file.
 submission *args:
-    python scripts/submission.py {{args}}
+    python scripts/submission.py {{ args }}
 
 # Regenerate requirements.txt from the latest direct dependencies.
 requirements:
     rm -rf /tmp/safe-bug-bounty-venv && python3.13 -m venv /tmp/safe-bug-bounty-venv
-    /tmp/safe-bug-bounty-venv/bin/pip install vyper titanoboa pytest certora-cli
+    /tmp/safe-bug-bounty-venv/bin/pip install certora-cli mdformat mdformat-gfm pytest ruff titanoboa vyper
     /tmp/safe-bug-bounty-venv/bin/pip freeze > requirements.txt

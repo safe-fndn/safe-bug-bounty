@@ -122,9 +122,7 @@ def test_bond_id(bond, alice, chain_id, bonded):
     assert bonded == keccak(b"\x19" + message.version + message.header + message.body)
 
 
-def test_bond(
-    bond, token, alice, amount, lockup, initial_balance, submission, bonded
-):
+def test_bond(bond, token, alice, amount, lockup, initial_balance, submission, bonded):
     unlock = boa.env.timestamp + lockup
     [event] = events(bond, "Bonded")
     assert (event.bond_id, event.owner, event.submission, event.unlock) == (

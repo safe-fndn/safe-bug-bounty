@@ -1,0 +1,8 @@
+target-version = "py313"
+# Scripts are imported as top-level modules (see `pytest.ini`), so they are
+# first-party for import sorting.
+src = ["scripts", "tests"]
+
+[lint]
+# The defaults, plus isort, pyupgrade and flake8-bugbear.
+extend-select = ["I", "UP", "B"]

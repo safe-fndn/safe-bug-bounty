@@ -6,6 +6,7 @@ on:
       - "contracts/**"
       - "certora/**"
       - "requirements.txt"
+      - "Justfile"
       - ".github/workflows/certora.yml"
   push:
     branches: [main]
@@ -13,6 +14,7 @@ on:
       - "contracts/**"
       - "certora/**"
       - "requirements.txt"
+      - "Justfile"
       - ".github/workflows/certora.yml"
 
 jobs:
@@ -21,9 +23,9 @@ jobs:
     outputs:
       confs: ${{ steps.list.outputs.confs }}
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - id: list
-        run: echo "confs=$(ls certora/conf/*.conf | jq -R -s -c 'split("\n") | map(select(. != ""))')" >> "$GITHUB_OUTPUT"
+        run: echo "confs=$(ls certora/conf/*.conf | jq -R -s -c 'split("\n") | map(select(. != "") | ltrimstr("certora/conf/") | rtrimstr(".conf"))')" >> "$GITHUB_OUTPUT"
 
   prove:
     needs: confs
@@ -34,18 +36,19 @@ jobs:
       matrix:
         conf: ${{ fromJSON(needs.confs.outputs.confs) }}
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-python@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: "3.13"
           cache: pip
       # certoraRun type checks the specs locally with Java before uploading.
-      - uses: actions/setup-java@v6
+      - uses: actions/setup-java@d1374f8ac74474200d16ef8ecee22c7ae7a51880 # v6.3.0
         with:
           distribution: temurin
           java-version: "21"
+      - uses: safe-research/actions/install-just@7f1da9594591d697dbb6712fdc519dc53c9df778 # v1
       - run: pip install -r requirements.txt
-      - run: certoraRun "$CONF"
+      - run: just certora "$CONF"
         env:
           CONF: ${{ matrix.conf }}
           CERTORAKEY: ${{ secrets.CERTORA_KEY }}

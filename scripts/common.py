@@ -208,7 +208,6 @@ def compile_bond():
     return Compiled(output["abi"], output["bytecode"])
 
 
-
 def transaction_bundle(chain_id, transactions, created_at=None, safe=None):
     """
     A Safe Transaction Builder bundle, the JSON file that the Transaction
