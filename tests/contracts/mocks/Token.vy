@@ -1,6 +1,7 @@
 # pragma version ~=0.4.3
 """
 @title Mock ERC20 Token
+@license LGPL-3.0-only
 @notice Minimal ERC20 for contract tests. Anyone can mint.
 """
 

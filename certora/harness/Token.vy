@@ -1,6 +1,7 @@
 # pragma version ~=0.4.3
 """
 @title Prover ERC20 Token
+@license LGPL-3.0-only
 @notice Well-behaved ERC20 that the Certora Prover links as `BountyBond.TOKEN`.
         No minting, burning, pausing, fees or hooks: `transfer` and
         `transferFrom` either move exactly `amount` and return `True`, or

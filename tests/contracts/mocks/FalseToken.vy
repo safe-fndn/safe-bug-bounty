@@ -1,6 +1,7 @@
 # pragma version ~=0.4.3
 """
 @title Mock Failing ERC20 Token
+@license LGPL-3.0-only
 @notice Transfers move nothing and return `succeed`, which anyone can set.
         Used to test that `BountyBond` checks the returned `bool`.
 """
