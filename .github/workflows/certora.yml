@@ -1,0 +1,51 @@
+name: Certora
+
+on:
+  pull_request:
+    paths:
+      - "contracts/**"
+      - "certora/**"
+      - "requirements.txt"
+      - ".github/workflows/certora.yml"
+  push:
+    branches: [main]
+    paths:
+      - "contracts/**"
+      - "certora/**"
+      - "requirements.txt"
+      - ".github/workflows/certora.yml"
+
+jobs:
+  confs:
+    runs-on: ubuntu-latest
+    outputs:
+      confs: ${{ steps.list.outputs.confs }}
+    steps:
+      - uses: actions/checkout@v7
+      - id: list
+        run: echo "confs=$(ls certora/conf/*.conf | jq -R -s -c 'split("\n") | map(select(. != ""))')" >> "$GITHUB_OUTPUT"
+
+  prove:
+    needs: confs
+    name: prove (${{ matrix.conf }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        conf: ${{ fromJSON(needs.confs.outputs.confs) }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+          cache: pip
+      # certoraRun type checks the specs locally with Java before uploading.
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: "21"
+      - run: pip install -r requirements.txt
+      - run: certoraRun "$CONF"
+        env:
+          CONF: ${{ matrix.conf }}
+          CERTORAKEY: ${{ secrets.CERTORA_KEY }}
