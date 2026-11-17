@@ -37,6 +37,10 @@ bond *args:
 claim *args:
     python scripts/claim.py {{args}}
 
+# Compute the submission hash (and optionally the bond ID) of a submission .eml file.
+submission *args:
+    python scripts/submission.py {{args}}
+
 # Regenerate requirements.txt from the latest direct dependencies.
 requirements:
     rm -rf /tmp/safe-bug-bounty-venv && python3.13 -m venv /tmp/safe-bug-bounty-venv

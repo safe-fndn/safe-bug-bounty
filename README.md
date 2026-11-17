@@ -14,9 +14,9 @@ This creates a `.venv` virtual environment and installs the pinned dependencies 
 
 ## Tools
 
-The scripts never use private keys or connect to a node. Each one writes a Safe Transaction Builder bundle (a JSON file in `bundles/`) that the owners of a Safe import into the Transaction Builder in the Safe UI, where it is simulated before being signed and executed.
+The scripts in `scripts/` are utilities for bonding bug bounty submissions. Bonds are posted and claimed on-chain, but the scripts never use private keys or connect to a node. Scripts that assist with on-chain interactions write a Safe Transaction Builder bundle (a JSON file in `bundles/`) that the owners of a Safe import into the Transaction Builder in the Safe UI, where it is simulated before being signed and executed.
 
-The scripts only write Safe Transaction Builder bundles. To use an EOA instead, send the transactions in the bundle yourself: each one has a target (`to`), a value and either raw call data or a contract method with its arguments, in order.
+Transactions are only written as Safe Transaction Builder bundles. To use an EOA instead, send the transactions in the bundle yourself: each one has a target (`to`), a value and either raw call data or a contract method with its arguments, in order.
 
 `BountyBond` is deployed through the [Safe singleton factory](https://github.com/safe-fndn/safe-singleton-factory), so its address depends only on its deployment parameters. All scripts accept the same options, which default to the production values:
 
@@ -54,12 +54,20 @@ just claim --owner SAFE --bond-id ID [options]
 
 Writes a bundle that claims the bond back to the Safe that posted it. The claim only succeeds once the lockup has passed; otherwise the Safe UI simulation shows why it reverts.
 
+### Check a submission
+
+```sh
+just submission FILE.eml [--owner SAFE] [options]
+```
+
+Reads a submission email, such as one downloaded from Gmail with "Download message", and prints its sender, subject and submission hash. With `--owner`, it also prints the bond ID for that Safe, which can be compared with the bonds posted on-chain. The email must have a single sender and subject, the subject must follow the same rules as in `just bond`, and the email must not have attachments or any parts other than text.
+
 ## Development
 
 ### Repository layout
 
 - `contracts/BountyBond.vy`: the bond contract (Vyper).
-- `scripts/`: tools to deploy the contract, post a bond and claim it back.
+- `scripts/`: utilities for bonding bug bounty submissions.
 - `tests/`: contract and script tests (pytest and titanoboa).
 - `certora/`: formal verification specs (Certora Prover).
 
