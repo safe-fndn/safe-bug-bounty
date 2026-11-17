@@ -1,6 +1,7 @@
 # pragma version ~=0.4.3
 """
 @title Prover BountyBond Harness
+@license LGPL-3.0-only
 @notice `BountyBond` with extra views for the Certora Prover. Its behaviour,
         storage and immutables are exactly those of `BountyBond`.
 """

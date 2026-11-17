@@ -1,6 +1,7 @@
 # pragma version ~=0.4.3
 """
 @title Bounty Bond
+@license LGPL-3.0-only
 @notice Locks a fixed token amount per bug bounty submission. The owner can
         claim it back once the lockup period has passed.
 """
