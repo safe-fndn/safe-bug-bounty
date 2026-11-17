@@ -67,10 +67,10 @@ just claim --owner SAFE --bond-id ID [--out PATH] [shared options]
 Compute the submission hash of a submission email, and its bond ID for the Safe `--owner` if given (`just submission` runs `python scripts/submission.py`):
 
 ```sh
-just submission FILE.eml [--owner SAFE] [shared options]
+just submission FILE.eml [--owner SAFE] [--original-sender] [shared options]
 ```
 
-The `.eml` file is parsed with the standard library `email` package (`policy.default`, which unfolds and decodes headers). The email is the `addr_spec` of the single `From` address and the subject is the single `Subject` header, both normalized as in `just bond`. Errors are deliberately strict: anything other than exactly one `From` address and one `Subject`, a subject that is not printable ASCII, attachments, and any parts that are not `text/*` (or `multipart/*` containers) are rejected. The script writes no bundle; it prints the email, subject and submission hash, and with `--owner` the bond ID, the `BountyBond` address and chain ID, and the owner.
+The `.eml` file is parsed with the standard library `email` package (`policy.default`, which unfolds and decodes headers). The email is the `addr_spec` of the single `From` address and the subject is the single `Subject` header, both normalized as in `just bond`. Errors are deliberately strict: anything other than exactly one `From` address and one `Subject`, a subject that is not printable ASCII, attachments, and any parts that are not `text/*` (or `multipart/*` containers) are rejected. `--original-sender` takes the email from the `X-Original-Sender` header instead of `From`, for emails received through the bug bounty mailing list (which rewrites `From` to the list's address); the script parses it as an address header with its own copy of the header registry, so `policy.default` is not changed. The script writes no bundle; it prints the email, subject and submission hash, and with `--owner` the bond ID, the `BountyBond` address and chain ID, and the owner.
 
 ### Formal verification
 

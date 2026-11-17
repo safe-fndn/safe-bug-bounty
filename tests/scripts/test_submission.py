@@ -1,3 +1,4 @@
+from email import policy
 from email.message import EmailMessage
 
 import pytest
@@ -153,3 +154,39 @@ def test_main_error(eml):
     path = eml(message(subject="Réentrancy"))
     with pytest.raises(SystemExit, match="error: the subject is not printable"):
         common.run(lambda: submission.main([str(path)]))
+
+
+def list_message(original_sender="Alice@Example.COM"):
+    """A submission email received through the bug bounty mailing list."""
+    email = message(sender="'Alice' via Bounty <bounty@example.org>")
+    if original_sender is not None:
+        email["X-Original-Sender"] = original_sender
+    return email
+
+
+def test_read_submission_original_sender(eml):
+    path = eml(list_message())
+    assert submission.read_submission(path) == ("bounty@example.org", SUBJECT)
+    assert submission.read_submission(path, "X-Original-Sender") == (EMAIL, SUBJECT)
+
+
+def test_read_submission_original_sender_does_not_change_default_policy(eml):
+    submission.read_submission(eml(list_message()), "X-Original-Sender")
+    header = policy.default.header_factory("X-Original-Sender", EMAIL)
+    assert not hasattr(header, "addresses")
+
+
+@pytest.mark.parametrize("original_sender", [None, "Alice", f"{EMAIL}, bob@x.org"])
+def test_read_submission_rejects_original_sender(eml, original_sender):
+    path = eml(list_message(original_sender))
+    with pytest.raises(common.ScriptError, match="X-Original-Sender"):
+        submission.read_submission(path, "X-Original-Sender")
+
+
+def test_main_original_sender(eml, capsys):
+    submission.main([str(eml(list_message())), "--original-sender"])
+    output = capsys.readouterr().out
+
+    hash = common.compute_submission_hash(EMAIL, SUBJECT)
+    assert printed(output, "Email") == EMAIL
+    assert printed(output, "Submission hash") == HexBytes(hash).to_0x_hex()
