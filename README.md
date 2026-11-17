@@ -20,13 +20,13 @@ Transactions are only written as Safe Transaction Builder bundles. To use an EOA
 
 `BountyBond` is deployed through the [Safe singleton factory](https://github.com/safe-fndn/safe-singleton-factory), so its address depends only on its deployment parameters. All scripts accept the same options, which default to the production values:
 
-| Option           | Default                                                              |                                           |
-| ---------------- | -------------------------------------------------------------------- | ----------------------------------------- |
-| `--chain-id`     | `1`                                                                  | Chain of the bundle                       |
-| `--token`        | `0x5aFE3855358E112B5647B952709E6165e1c1eEEe`                         | Bond token (SAFE)                         |
-| `--amount`       | `1337000000000000000000`                                             | Bond amount (1337.0)                      |
-| `--lockup`       | `2592000`                                                            | Lockup in seconds (30 days)               |
-| `--create2-salt` | `0x0000000000000000000000000000000000000000000000000000000000000000` | `CREATE2` salt                            |
+| Option           | Default                                                              |                             |
+| ---------------- | -------------------------------------------------------------------- | --------------------------- |
+| `--chain-id`     | `1`                                                                  | Chain of the bundle         |
+| `--token`        | `0x5aFE3855358E112B5647B952709E6165e1c1eEEe`                         | Bond token (SAFE)           |
+| `--amount`       | `1337000000000000000000`                                             | Bond amount (1337.0)        |
+| `--lockup`       | `2592000`                                                            | Lockup in seconds (30 days) |
+| `--create2-salt` | `0x0000000000000000000000000000000000000000000000000000000000000000` | `CREATE2` salt              |
 
 ### Deploy
 
@@ -79,6 +79,15 @@ The tests use [pytest](https://docs.pytest.org) and [titanoboa](https://github.c
 
 ```sh
 just test
+```
+
+### Linting
+
+The Python, Markdown and `Justfile` are formatted, and the Python is linted.
+
+```sh
+just lint
+just fix
 ```
 
 ### Formal verification

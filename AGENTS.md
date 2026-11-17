@@ -4,7 +4,7 @@ This file provides guidance to coding agents (such as Claude Code and Codex) whe
 
 ## Overview
 
-The on-chain submission bond for the Safe bug bounty (`contracts/BountyBond.vy`) and its scripts. Contracts are written in Vyper, tested with titanoboa and pytest, and formally verified with the Certora Prover, all from one Python (3.13) virtual environment. There are no lint or format tools yet.
+The on-chain submission bond for the Safe bug bounty (`contracts/BountyBond.vy`) and its scripts. Contracts are written in Vyper, tested with titanoboa and pytest, and formally verified with the Certora Prover, all from one Python (3.13) virtual environment.
 
 [README.md](README.md) covers setup, what each script does and its options, and how to run tests and formal verification; read it first, and keep it as the single place for user-facing usage. This file only adds what matters when changing the code.
 
@@ -15,6 +15,8 @@ Commands are run with [`just`](https://github.com/casey/just); the `Justfile` do
 ```sh
 just test tests/contracts/test_bounty_bond.py::test_deploy
 ```
+
+Run `just fix` and then `just lint` before committing: they format the Python, Markdown and `Justfile`, and lint the Python. Vyper and CVL sources are not formatted automatically, so follow the existing style in them by hand. `just` only shows the comment line directly above a recipe in `just --list`, and its formatter separates any earlier comment lines with a blank line, so keep recipe descriptions to one line.
 
 ### Tests
 
@@ -40,4 +42,4 @@ CI (`.github/workflows/certora.yml`) runs every `certora/conf/*.conf`. Confs inh
 
 ### Dependencies
 
-`requirements.txt` pins every direct and transitive dependency. The direct dependencies are `vyper`, `titanoboa`, `pytest` and `certora-cli`. To add one (to the `pip install` line of the `requirements` recipe first) or upgrade them all, run `just requirements`, which regenerates the file from a fresh virtual environment, and then `just setup` to update `.venv`.
+`requirements.txt` pins every direct and transitive dependency. The direct dependencies are listed in the `requirements` recipe of the `Justfile`. To add one (to that recipe first, keeping the list sorted alphabetically) or upgrade them all, run `just requirements`, which regenerates the file from a fresh virtual environment, and then `just setup` to update `.venv`.
