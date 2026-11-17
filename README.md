@@ -62,6 +62,8 @@ just submission FILE.eml [--owner SAFE] [options]
 
 Reads a submission email, such as one downloaded from Gmail with "Download message", and prints its sender, subject and submission hash. With `--owner`, it also prints the bond ID for that Safe, which can be compared with the bonds posted on-chain. The email must have a single sender and subject, the subject must follow the same rules as in `just bond`, and the email must not have attachments or any parts other than text.
 
+For emails received through the bug bounty mailing list, whose sender is rewritten to the list's address, use `--original-sender` to take the sender from the `X-Original-Sender` header instead.
+
 ## Development
 
 ### Repository layout
