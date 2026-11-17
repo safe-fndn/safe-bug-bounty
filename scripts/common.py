@@ -28,13 +28,6 @@ BOND_TYPE = "Bond(address owner,Submission submission)" + SUBMISSION_TYPE
 
 CONTRACT = Path(__file__).parents[1] / "contracts" / "BountyBond.vy"
 
-# The default deployment parameters: the SAFE token (on Ethereum mainnet), 1337
-# SAFE, 30 days and the zero `CREATE2` salt.
-SAFE_TOKEN = "0x5aFE3855358E112B5647B952709E6165e1c1eEEe"
-BOND_AMOUNT = "1337e18"
-LOCKUP = "2592000"
-CREATE2_SALT = "0x" + "00" * 32
-
 # The Safe singleton factory, a `CREATE2` factory at the same address on every
 # bytecode-compatible EVM chain. Its call data is a 32-byte salt followed by
 # the init code.
@@ -121,25 +114,25 @@ def parser(description):
     parser.add_argument(
         "--token",
         type=parse_address,
-        default=SAFE_TOKEN,
+        default="0x5aFE3855358E112B5647B952709E6165e1c1eEEe",
         help="bond token (default: %(default)s, SAFE)",
     )
     parser.add_argument(
         "--amount",
         type=parse_uint,
-        default=BOND_AMOUNT,
+        default="1337e18",
         help="bond amount in the token's smallest unit (default: %(default)s)",
     )
     parser.add_argument(
         "--lockup",
         type=parse_uint,
-        default=LOCKUP,
+        default="2592000",
         help="lockup period in seconds (default: %(default)s, 30 days)",
     )
     parser.add_argument(
         "--create2-salt",
         type=parse_bytes32,
-        default=CREATE2_SALT,
+        default="0x" + "00" * 32,
         help="CREATE2 salt of the deployment, 0x followed by 64 hex digits "
         "(default: %(default)s)",
     )

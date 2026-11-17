@@ -80,7 +80,7 @@ def test_main_no_salt(salt, tmp_path, capsys):
     }
 
 
-def test_main_defaults(salt, monkeypatch, tmp_path, capsys):
+def test_main_defaults(salt, monkeypatch, tmp_path, capsys, safe_token):
     monkeypatch.chdir(tmp_path)
     bond.main(["--owner", OWNER, "--email", EMAIL, "--subject", SUBJECT])
     output = capsys.readouterr().out
@@ -97,7 +97,7 @@ def test_main_defaults(salt, monkeypatch, tmp_path, capsys):
     bundle = json.loads(path.read_text())
     assert bundle["chainId"] == "1"
     assert bundle["meta"] == {"createdFromSafeAddress": owner}
-    assert [tx["to"] for tx in bundle["transactions"]] == [common.SAFE_TOKEN, address]
+    assert [tx["to"] for tx in bundle["transactions"]] == [safe_token, address]
     assert [tx["contractInputsValues"] for tx in bundle["transactions"]] == [
         {"spender": address, "value": str(1337 * 10**18)},
         {"submission": HexBytes(submission).to_0x_hex()},

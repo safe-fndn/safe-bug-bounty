@@ -122,7 +122,7 @@ def test_main_unknown_bond(factory_bond, alice, write_claim, execute_bundle):
         execute_bundle(path, sender=alice)
 
 
-def test_main_defaults(monkeypatch, tmp_path, capsys):
+def test_main_defaults(monkeypatch, tmp_path, capsys, safe_token):
     monkeypatch.chdir(tmp_path)
     claim.main(["--owner", OWNER, "--bond-id", "0x" + "AB" * 32])
     output = capsys.readouterr().out
@@ -133,7 +133,7 @@ def test_main_defaults(monkeypatch, tmp_path, capsys):
     assert printed(output, "BountyBond") == address
     assert "on chain ID 1\n" in output
     assert printed(output, "Owner") == owner
-    assert f"Amount returned: {1337 * 10**18} of token {common.SAFE_TOKEN}" in output
+    assert f"Amount returned: {1337 * 10**18} of token {safe_token}" in output
 
     path = tmp_path / "bundles" / "claim-abababab.json"
     assert printed(output, "Transaction bundle") == "bundles/claim-abababab.json"

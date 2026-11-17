@@ -24,17 +24,17 @@ def predicted(output):
     return output.split("BountyBond will be deployed at ")[1].split()[0]
 
 
-def test_main(factory, execute, tmp_path, capsys):
+def test_main(factory, execute, tmp_path, capsys, safe_token):
     path = tmp_path / "deploy.json"
     deploy.main(["--out", str(path)])
 
     output = capsys.readouterr().out
     bond = execute(path)
     assert bond.address == predicted(output)
-    assert bond.TOKEN() == common.SAFE_TOKEN
+    assert bond.TOKEN() == safe_token
     assert bond.AMOUNT() == 1337 * 10**18
     assert bond.LOCKUP() == 2_592_000
-    assert f"token:        {common.SAFE_TOKEN}" in output
+    assert f"token:        {safe_token}" in output
     assert f"amount:       {1337 * 10**18}" in output
     assert "lockup:       2592000" in output
     assert f"CREATE2 salt: 0x{'00' * 32}" in output
