@@ -2,6 +2,19 @@
 
 The permissionless on-chain submission bond for the Safe bug bounty. To submit a report, you lock a fixed amount of SAFE in the `BountyBond` contract, and the bond is automatically tied to your submission. Once the lockup period ends, you can always claim the full bond back. The bond is intended to not cost honest researchers anything, as the bond is paid back in full; but increasing the barrier to entry for low-effort, LLM-generated reports.
 
+## Deployment
+
+`BountyBond` is deployed on Ethereum mainnet at [`0x24cd2c2B99E4028C1b983934c943112B3cd3cBb6`](https://etherscan.io/address/0x24cd2c2B99E4028C1b983934c943112B3cd3cBb6#code), from commit `0221a23`, with:
+
+| Parameter    | Value                                                                |             |
+| ------------ | -------------------------------------------------------------------- | ----------- |
+| Token        | `0x5aFE3855358E112B5647B952709E6165e1c1eEEe`                         | SAFE        |
+| Amount       | `1337000000000000000000`                                             | 1337.0 SAFE |
+| Lockup       | `2592000`                                                            | 30 days     |
+| CREATE2 salt | `0x0000000000000000000000000000000000000000000000000000000000000000` |             |
+
+These are the defaults of the scripts, so `just deploy` reproduces this address.
+
 ## Setup
 
 Requires Python 3.13 and [`just`](https://github.com/casey/just).
