@@ -325,9 +325,16 @@ def normalize_subject(subject):
     return subject
 
 
+# The bytes of entropy in the subject salt. Emails and subjects of bug bounty
+# submissions are often guessable, so the salt alone must make the submission
+# hash infeasible to guess.
+SALT_BYTES = 16
+
+
 def salt_subject(subject):
     """
-    The (normalized) `subject` with ` (0x<8 random hex digits>)` appended, so
-    that the submission hash cannot be guessed from the email and subject.
+    The (normalized) `subject` with ` (0x<32 random hex digits>)` (128 bits)
+    appended, so that the submission hash cannot be guessed from the email and
+    subject.
     """
-    return f"{subject} (0x{secrets.token_hex(4)})"
+    return f"{subject} (0x{secrets.token_hex(SALT_BYTES)})"
