@@ -29,8 +29,8 @@ def main(argv=None):
         "--no-salt",
         dest="salt",
         action="store_false",
-        help="don't append the random ' (0x<8 hex digits>)' to the subject that "
-        "keeps the bond from being linked to a guessed email and subject",
+        help="don't append the random ' (0x<32 hex digits>)' to the subject; only "
+        "use it if the subject already ends in at least 128 bits of random text",
     )
     parser.add_argument(
         "--out",

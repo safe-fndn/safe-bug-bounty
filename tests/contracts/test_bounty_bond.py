@@ -10,7 +10,7 @@ SUBMISSION_TYPE = "Submission(string email,string subject)"
 BOND_TYPE = "Bond(address owner,Submission submission)" + SUBMISSION_TYPE
 
 EMAIL = "alice@example.com"
-SUBJECT = "Reentrancy in Vault.withdraw (0x1a2b3c4d)"
+SUBJECT = "Reentrancy in Vault.withdraw (0x1a2b3c4d5e6f708192a3b4c5d6e7f801)"
 
 
 def submission_hash(email, subject):

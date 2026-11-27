@@ -44,7 +44,7 @@ just bond --owner SAFE --email EMAIL --subject SUBJECT [options]
 
 Writes a bundle that approves the bond amount and bonds the submission, with the Safe `--owner` as the bond owner. It prints the bond ID, which you need to claim the bond back.
 
-The email is trimmed and lowercased, and the subject is trimmed and must be printable ASCII. By default, a random salt ` (0x<8 hex digits>)` is appended to the subject. It adds entropy to the submission so that it is harder to guess, and the bond cannot be linked to a guessed email and subject. **Submit with the subject exactly as printed**, since the salt cannot be recovered. Use `--no-salt` if you do not want this behaviour, for example if you want to derive your own entropy or need more than the salt provides.
+The email is trimmed and lowercased, and the subject is trimmed and must be printable ASCII. A random salt ` (0x<32 hex digits>)` (128 bits of entropy) is appended to the subject. Emails and subjects are often guessable, and the salt is required so that the bond cannot be linked to a guessed email and subject. **Submit with the subject exactly as printed**, since the salt cannot be recovered. Use `--no-salt` only if the subject already ends in at least 128 bits of random text that you added yourself.
 
 ### Claim a bond
 

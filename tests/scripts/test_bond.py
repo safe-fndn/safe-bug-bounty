@@ -10,13 +10,14 @@ import common
 EMAIL = "alice@example.com"
 SUBJECT = "Reentrancy in Vault.withdraw"
 OWNER = "0x0000000000000000000000000000000000005afe"
-SALTED = f"{SUBJECT} (0x1a2b3c4d)"
+SALT = "1a2b3c4d5e6f708192a3b4c5d6e7f801"
+SALTED = f"{SUBJECT} (0x{SALT})"
 
 
 @pytest.fixture
 def salt(monkeypatch):
-    """Makes the subject salt `0x1a2b3c4d`."""
-    monkeypatch.setattr(common.secrets, "token_hex", lambda nbytes: "1a2b3c4d")
+    """Makes the subject salt `0x` followed by `SALT`."""
+    monkeypatch.setattr(common.secrets, "token_hex", lambda nbytes: SALT)
 
 
 def printed(output, label):

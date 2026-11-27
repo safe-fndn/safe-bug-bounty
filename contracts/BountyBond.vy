@@ -86,8 +86,10 @@ def bond(submission: bytes32) -> bytes32:
                keccak256(bytes(subject))
            ))
          so that the submitter's email and subject never appear on-chain.
-         They may be guessable, so append random text to the subject for
-         extra entropy (the bond script does this unless `--no-salt`).
+         The email and subject are often guessable, so the subject must end
+         in random text with at least 128 bits of entropy; otherwise, the
+         bond can be linked to a guessed email and subject. The bond script
+         appends this unless `--no-salt`.
     @param submission The `Submission` struct hash.
     @return The bond ID, the EIP-712 typed-data hash
               keccak256(0x1901 ++ domainSeparator() ++ hashStruct(Bond))

@@ -13,7 +13,7 @@ from hexbytes import HexBytes
 import common
 
 EMAIL = "alice@example.com"
-SUBJECT = "Reentrancy in Vault.withdraw (0x1a2b3c4d)"
+SUBJECT = "Reentrancy in Vault.withdraw (0x1a2b3c4d5e6f708192a3b4c5d6e7f801)"
 TO = "0x0000000000000000000000000000000000000001"
 SAFE = "0x5aFE3855358E112B5647B952709E6165e1c1eEEe"
 CLAIM = {
@@ -385,8 +385,8 @@ def test_normalize_subject_empty(subject):
 
 def test_salt_subject(monkeypatch):
     def token_hex(nbytes):
-        assert nbytes == 4
-        return "1a2b3c4d"
+        assert nbytes == 16
+        return "1a2b3c4d5e6f708192a3b4c5d6e7f801"
 
     monkeypatch.setattr(common.secrets, "token_hex", token_hex)
     salted = common.salt_subject("Reentrancy in Vault.withdraw")
@@ -398,4 +398,4 @@ def test_salt_subject_random():
     salted = {common.salt_subject("Reentrancy") for _ in range(8)}
     assert len(salted) == 8
     for subject in salted:
-        assert re.fullmatch(r"Reentrancy \(0x[0-9a-f]{8}\)", subject)
+        assert re.fullmatch(r"Reentrancy \(0x[0-9a-f]{32}\)", subject)
